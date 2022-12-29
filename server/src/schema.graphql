@@ -10,6 +10,8 @@ type Query {
 
 type Mutation {
   createJob(input: CreateJobInput!): Job
+  deleteJob(id: ID!): Job
+  updateJob(input: UpdateJobInput!): Job
 }
 
 type Company {
@@ -28,6 +30,13 @@ type Job {
 
 #Input Types are used to pass arguments to mutations
 input CreateJobInput {
+  title: String!
+  description: String
+  companyId: ID!
+}
+
+input UpdateJobInput {
+  id: ID!
   title: String!
   description: String
   companyId: ID!
