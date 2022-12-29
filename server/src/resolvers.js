@@ -11,6 +11,12 @@ export const resolvers = {
     createJob: async (_root, { input }) => {
       return Job.create(input);
     },
+    deleteJob: async (_root, { id }) => {
+      return Job.delete(id);
+    },
+    updateJob: async (_root, { input }) => {
+      return Job.update(input);
+    },
   },
 
   Company: {
