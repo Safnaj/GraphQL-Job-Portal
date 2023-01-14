@@ -6,6 +6,10 @@ function rejectIf(condition) {
   }
 }
 
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export const resolvers = {
   Query: {
     company: (_root, { id }) => Company.findById(id),
@@ -16,6 +20,7 @@ export const resolvers = {
   Mutation: {
     createJob: async (_root, { input }, { user }) => {
       rejectIf(!user);
+      await delay(2000);
       return Job.create({ ...input, companyId: user.companyId });
     },
     deleteJob: async (_root, { id }, { user }) => {
