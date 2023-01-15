@@ -1,21 +1,16 @@
-import JobList from "./JobList";
 // import { jobs } from "../fake-data";
-import { getJobs } from "../graphql/queries";
-import { useEffect, useState } from "react";
+import { useJobs } from "../hooks/useJobs";
+import JobList from "./JobList";
 
 function JobBoard() {
-  const [jobs, setJobs] = useState([]);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    console.log("Mounted");
-    getJobs()
-      .then((jobs) => setJobs(jobs))
-      .catch((err) => setError(true));
-  }, []);
+  const { jobs, loading, error } = useJobs();
+  console.log("[Job Board", { jobs, loading, error });
 
   if (error) {
     return <h1>Sorry, something went wrong.</h1>;
+  }
+  if (loading) {
+    return <h1>Loading...</h1>;
   }
   return (
     <div>
