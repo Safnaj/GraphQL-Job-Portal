@@ -1,32 +1,18 @@
-import { Link } from "react-router-dom";
-import { logout } from "../auth";
-
-function NavBar({ loggedIn, onLogout }) {
-  const handleLogout = () => {
-    logout();
-    onLogout();
-  };
-
+function NavBar({ user, onLogout }) {
   return (
-    <nav className='navbar' style={{ boxShadow: "0px 7px 29px 0px #64646f33" }}>
-      <div className='navbar-start'>
-        <Link className='navbar-item' to='/'>
-          Home
-        </Link>
-        {loggedIn ? (
-          <>
-            <Link className='navbar-item' to='/jobs/new'>
-              Post Job
-            </Link>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a className='navbar-item' onClick={handleLogout}>
+    <nav className="navbar">
+      <div className="navbar-brand">
+        <p className="navbar-item has-text-weight-bold">
+          GraphQL Chat
+        </p>
+      </div>
+      <div className="navbar-end">
+        {Boolean(user) && (
+          <div className="navbar-item">
+            <button className="button is-ghost" onClick={onLogout}>
               Logout
-            </a>
-          </>
-        ) : (
-          <Link className='navbar-item' to='/login'>
-            Login
-          </Link>
+            </button>
+          </div>
         )}
       </div>
     </nav>

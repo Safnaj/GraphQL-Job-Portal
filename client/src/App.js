@@ -1,45 +1,30 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { Route, Routes } from "react-router-dom";
-import { isLoggedIn } from "./auth";
-import CompanyDetail from "./components/CompanyDetail";
-import LoginForm from "./components/LoginForm";
-import JobBoard from "./components/JobBoard";
-import JobDetail from "./components/JobDetail";
-import JobForm from "./components/JobForm";
-import NavBar from "./components/NavBar";
-import { ApolloProvider } from "@apollo/client";
-import { client } from "./graphql/queries";
+import { ApolloProvider } from '@apollo/client';
+import { useState } from 'react';
+import { getUser, logout } from './auth';
+import Chat from './components/Chat';
+import LoginForm from './components/LoginForm';
+import NavBar from './components/NavBar';
+import client from './graphql/client';
 
 function App() {
-  const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(isLoggedIn);
-
-  const handleLogin = () => {
-    setLoggedIn(true);
-    navigate("/");
-  };
+  const [user, setUser] = useState(getUser);
 
   const handleLogout = () => {
-    setLoggedIn(false);
-    navigate("/");
+    logout();
+    setUser(null);
   };
 
   return (
     <ApolloProvider client={client}>
-      <NavBar loggedIn={loggedIn} onLogout={handleLogout} />
-      <main className='section'>
-        <Routes>
-          <Route exact path='/' element={<JobBoard />} />
-          <Route path='/companies/:companyId' element={<CompanyDetail />} />
-          <Route exact path='/jobs/new' element={<JobForm />} />
-          <Route path='/jobs/:jobId' element={<JobDetail />} />
-          <Route
-            exact
-            path='/login'
-            element={<LoginForm onLogin={handleLogin} />}
-          />
-        </Routes>
+      <header>
+        <NavBar user={user} onLogout={handleLogout} />
+      </header>
+      <main>
+        {Boolean(user) ? (
+          <Chat user={user} />
+        ) : (
+          <LoginForm onLogin={setUser} />
+        )}
       </main>
     </ApolloProvider>
   );
