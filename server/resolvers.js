@@ -28,7 +28,11 @@ export const resolvers = {
 
   Subscription: {
     messageAdded: {
-      subscribe: () => pubSub.asyncIterator("MESSAGE_ADDED"),
+      subscribe: (_root, _args, context) => {
+        // console.log("Context: ", context);
+        rejectIf(!context.userId);
+        return pubSub.asyncIterator("MESSAGE_ADDED");
+      },
     },
   },
 };
